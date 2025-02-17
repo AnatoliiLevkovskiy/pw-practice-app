@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "esbenp.prettier-vscode",
+        "ms-playwright.playwright",
+        "streetsidesoftware.code-spell-checker",
+        "codeium.codeium",
+        "pkief.material-icon-theme",
+        "sdras.night-owl"
+    ]
+}
