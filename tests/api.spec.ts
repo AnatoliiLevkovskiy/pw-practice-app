@@ -10,16 +10,13 @@ test("api test login", async ({ request }) => {
   const json = await response.json();
   token = json.user.token;
   console.log(token);
-  process.env['ACCESS_TOKEN'] = token 
+  process.env["ACCESS_TOKEN"] = token;
 });
 
-test("create new article", async ({ page,request }) => {
-    token??= 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyMDIyN30sImlhdCI6MTczOTI4MDYwMiwiZXhwIjoxNzQ0NDY0NjAyfQ.8eaDPAec1BK_2Q0mZLZy1CoQVYRD6hKOt5sISLGhzh8';
-    
-       
+test("create new article", async ({ request }) => {
   const response = await request.post("https://conduit-api.bondaracademy.com/api/articles/", {
     headers: {
-        Authorization: `Token ${token}`        
+      Authorization: `Token ${token}`,
     },
     data: {
       article: {
@@ -30,8 +27,7 @@ test("create new article", async ({ page,request }) => {
       },
     },
   });
-  console.log('Request headers:', response.headers());
   const json = await response.json();
-  console.log('Response body: '+ json);
+  console.log("Response body: " + json);
   expect(response.ok()).toBeTruthy();
 });

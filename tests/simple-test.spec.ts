@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { LeftMenuPageObject } from "../page-object/left-menu";
 import { SmartTable } from "../page-object/smart-table";
-import { table } from "console";
 import { Pagination } from "../page-object/components/smart-table-pager";
 
 test("simple test", async ({ page }) => {
@@ -14,6 +13,7 @@ test("simple test", async ({ page }) => {
     await box.check({ force: true });
     await expect(box).toBeChecked();
   }
+  // forEach doesn't work!
   // const arr = await checkBoxes.all();
   // arr.forEach(async (box)=>{
   //     await box.check({force: true});
@@ -24,14 +24,14 @@ test("simple test", async ({ page }) => {
 test("menu test", async ({ page }) => {
   const leftMenu = new LeftMenuPageObject(page);
   await page.goto("http://localhost:4200");
-  await leftMenu.openLeftMenu(["Tables", "Smart Table"]);
+  await leftMenu.openLeftMenu(["Tables & Data", "Smart Table"]);
   await leftMenu.page.waitForTimeout(2000);
 });
 
 test("smart table test", async ({ page }) => {
   const leftMenu = new LeftMenuPageObject(page);
   await page.goto("http://localhost:4200");
-  await leftMenu.openLeftMenu(["Tables", "Smart Table"]);
+  await leftMenu.openLeftMenu(["Tables & Data", "Smart Table"]);
   await page.locator(".ng2-smart-pagination-nav").getByText("2").click();
   const targetRow = page.locator("td").nth(1).getByText("11");
   await targetRow.click();
@@ -51,14 +51,12 @@ test("test select menu items", async ({ page }) => {
   await smartTable.filter("ID", "11");
   await leftMenu.openDashboard();
   await leftMenu.openLeftMenu(["Tables & Data", "Smart Table"]);
-  const t = await smartTable.getColumnValueFor1Row(3, 2);
-  console.log(t);
-  const allValuesForCell = smartTable.getAllRowValuesForColumn(1);
-  console.log(await allValuesForCell.allTextContents());
+  const celValue = await smartTable.getColumnValueFor1Row(3, 2);
+  expect(celValue).toBe("Bird");
+  const allValuesForCell = await smartTable.getAllRowValuesForColumn(1).allInnerTexts();
+  expect(allValuesForCell).toEqual(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]);
   const tableData = await smartTable.getDataFromDisplayedTable();
   expect(tableData).toEqual(testData);
-  // await leftMenu.openLeftMenu(['Charts','Echarts']);
-  // await leftMenu.openDashboard();
   await leftMenu.page.waitForTimeout(2000);
 });
 
@@ -69,7 +67,7 @@ test("test Pagination", async ({ page }) => {
   await page.goto("http://localhost:4200");
   await leftMenu.openLeftMenu(["Tables & Data", "Smart Table"]);
   await pagination.selectPage("2");
-  await page.screenshot({path: 'screenshot/test.png'});
+  await page.screenshot({ path: "screenshot/test.png" });
   await page.waitForTimeout(2000);
 });
 
